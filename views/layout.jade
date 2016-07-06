@@ -1,7 +1,18 @@
+include mixins
+
 doctype html
 html
 	head
+		meta(charset='utf-8')
 		title= title
+		block stylesheets
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		block scripts
 	body
-		block content
+		.navigation
+			block navigation
+		.container
+			.content
+				block content
+
+		+tracker()

@@ -1,5 +1,10 @@
 extends layout
 
+block navigation
+	+breadcrumb()
+
 block content
-	h1= title
-	p Welcome to #{title}
+	.page-header
+		a(href="/admin") Admin
+	.page-header
+		a(href="/cameras") Cameras

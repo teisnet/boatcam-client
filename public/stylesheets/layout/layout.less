@@ -1,0 +1,50 @@
+@import "base";
+@import "navigation";
+@import "scrollbar";
+
+
+body {
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	.user-select(none);
+}
+
+.list-column {
+	display: inline-block;
+	width: 400px;
+	height: 100%;
+	vertical-align: top;
+}
+
+.content-column {
+	display: inline-block;
+	width: 800px;
+	height: 100%;
+	vertical-align: top;
+}
+
+.container {
+	overflow-x: hidden;
+	overflow-y: auto;
+	position:absolute;
+	top: @navigation-height;
+	bottom: 0px;
+	left:   0px;
+	right:  0px;
+}
+
+.content {
+	padding: 30px 45px;
+	box-sizing: content-box;
+	margin: 0 auto;
+	width: @content-width;
+}
+
+a:link, a:visited, a:hover, a:active  {
+	//color: #08c;
+}
+
+.page-header {
+	font-size: 32px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
