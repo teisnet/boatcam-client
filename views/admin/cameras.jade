@@ -1,0 +1,14 @@
+extends ../layout
+
+block navigation
+	+breadcrumb('admin')
+
+block content
+	.page-header Cameras
+	ul.camera-list
+	.page-footer
+		a.btn.btn-success(href="cameras/new") Opret nyt kamera
+
+block scripts
+	script(src="/socket.io/socket.io.js")
+	script(src="/javascripts/cameras-page.js")
