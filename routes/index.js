@@ -6,4 +6,10 @@ router.get('/', function(req, res, next) {
 	res.render('index');
 });
 
+
+router.get('/cameras', function(req, res, next) {
+	res.render('cameras');
+});
+
+
 module.exports = router;

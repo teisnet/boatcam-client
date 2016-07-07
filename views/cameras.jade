@@ -1,0 +1,12 @@
+extends layout
+
+block navigation
+	+breadcrumb()
+
+block content
+	.page-header Cameras
+	ul.camera-list
+
+block scripts
+	script(src="/socket.io/socket.io.js")
+	script(src="/javascripts/cameras-page.js")
