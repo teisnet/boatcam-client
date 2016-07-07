@@ -12,4 +12,9 @@ router.get('/cameras', function(req, res) {
 });
 
 
+router.get('/cameras/:cameraSlug', function(req, res) {
+	res.render('camera');
+});
+
+
 module.exports = router;
