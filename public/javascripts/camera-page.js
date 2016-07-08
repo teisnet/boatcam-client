@@ -1,7 +1,7 @@
 "use strict";
 
-var apiUrl = "http://localhost:3001/api";
-var snapshotsUrl = "http://localhost:3001/snapshots";
+var apiUrl = config.apiUrl;
+var snapshotsUrl = config.snapshotsUrl;
 
 var player = null;
 var camera = null;

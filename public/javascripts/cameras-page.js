@@ -1,7 +1,7 @@
 "use strict";
 
-var apiUrl = "http://localhost:3001/api";
-var socket = io("http://localhost:3001/cameras");
+var apiUrl = config.apiUrl;
+var socket = io(config.socketUrl + "/cameras");
 
 // LOAD DATA
 $.getJSON(apiUrl + "/cameras", function(camerasData) {

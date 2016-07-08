@@ -1,12 +1,14 @@
 "use strict";
 
+var socketUrl = config.socketUrl;
+
 var Camera = function(config){
 	var self = this;
 
 	self.position = {x: 0, y: 0, zoom: 0};
 	self.online = false;
 	self.id = config.id;
-	self.socket = io("http://localhost:3001/cameras/" + config.slug);
+	self.socket = io(socketUrl + "/cameras/" + config.slug);
 
 	nextTick(function(){
 		self.socket.on("move", function(pos){
