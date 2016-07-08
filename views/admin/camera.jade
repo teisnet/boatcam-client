@@ -1,0 +1,56 @@
+extends ../layout
+
+block navigation
+	+breadcrumb('admin', 'cameras')
+
+block content
+	.page-header
+		.status-indicator
+		if newCameraPage
+			| New Camera
+		else
+			a.camera-title(target="_blank")
+			| &nbsp;
+			a.camera-shortcut.pull-right(target="_blank")
+				i.fa.fa-external-link
+	form
+		.field
+			label Enabled:
+			input#enabled(type="checkbox" name="enabled" value="true")
+		.field
+			label Title:
+			input(type="text" name="title" autofocus)
+		.field
+			label Slug:
+			input(type="text" name="slug"  required)
+		.field
+			label Hostname:
+			input(type="text" name="hostname")
+		.field
+			label Username:
+			input(type="text" name="username")
+		.field
+			label Password:
+			input(type="text" name="password")
+		.field
+			label RTMP hostname:
+			input.wide(type="text" name="uri")
+		.field
+			label ONVIF port:
+			input.narrow(type="number" name="onvif" min="0" max="65535" maxlength="5")
+		.field
+			label HTTP port:
+			input.narrow(type="number" name="http" min="0" max="65535" maxlength="5")
+		.page-footer
+			input#cameraSubmit.btn.btn-success(type="submit" value= newCameraPage ? "Create" : "Save")
+			if !newCameraPage
+				button#cameraDelete.btn.btn-danger(type="button") Delete
+		.error
+	if !newCameraPage
+		.field
+		h3 Positions
+		ul.camera-positions-list
+
+block scripts
+	script(src="/socket.io/socket.io.js")
+	script(src="/javascripts/admin/camera-page.js")
