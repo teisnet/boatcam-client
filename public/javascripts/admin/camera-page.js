@@ -5,12 +5,6 @@ var newCameraPage = false;
 var camera = null;
 
 // LOAD DATA
-$.getJSON(apiUrl + '/berths', function(berthData) {
-	$(berthData).each(function (index, berth) {
-		var $option = $("<option/>").attr("value", berth._id).text(berth.number + " - " + berth.owner);
-		$('#berths').append($option);
-	});
-});
 
 // Client side redirect if sub-route points to a camera instance
 var path = window.location.pathname;
