@@ -1,0 +1,32 @@
+extends ../layout
+
+block navigation
+	+breadcrumb('admin', 'berths')
+
+block content
+	.page-header.berth-title
+		if newBerthPage
+			| New Berth
+	form
+		.field
+			label Number:
+			input(type="text" name="number" autofocus required)
+		.field
+			label Owner:
+			input(type="text" name="owner")
+		.page-footer
+			input#berthSubmit.btn.btn-success(type="submit" value= newBerthPage ? "Create" : "Save")
+			if !newBerthPage
+				button#berthDelete.btn.btn-danger(type="button") Delete
+		.error
+	if !newBerthPage
+		.field
+		h3 Users
+		ul.camera-list.users-list
+		.field
+		h3 Positions
+		ul.camera-list.berth-positions-list
+
+block scripts
+	script(src="/javascripts/utils.js")
+	script(src="/javascripts/admin/berth-page.js")

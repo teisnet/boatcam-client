@@ -1,0 +1,13 @@
+extends ../layout
+
+block navigation
+	+breadcrumb('admin')
+
+block content
+	.page-header Berths
+	ul.camera-list
+	.page-footer
+		a.btn.btn-success(href="berths/new") Create new
+
+block scripts
+	script(src="/javascripts/berths-page.js")
