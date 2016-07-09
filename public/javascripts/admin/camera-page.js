@@ -21,21 +21,8 @@ if (path) {
 			$(".camera-title").text(cameraData.title);
 			$(".camera-title").attr("href", "/cameras/" + cameraData.slug);
 			$(".camera-shortcut").attr("href", "http://" + cameraData.username + ":" + cameraData.password + "@" + cameraData.hostname + ":" + cameraData.http);
-			$.each(cameraData, function(name, val){
-				var $el = $('[name="'+name+'"]'),
-					type = $el.attr('type');
 
-				switch(type){
-					case 'checkbox':
-						$el.attr('checked', 'checked');
-						break;
-					case 'radio':
-						$el.filter('[value="'+val+'"]').attr('checked', 'checked');
-						break;
-					default:
-						$el.val(val);
-				}
-			});
+			fillForm(cameraData);
 
 			$(cameraData.positions).each(function(index, position) {
 				var listItem =
