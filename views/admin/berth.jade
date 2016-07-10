@@ -8,6 +8,7 @@ block content
 		if newBerthPage
 			| New Berth
 	form
+		input(type="hidden" name="id")
 		.field
 			label Number:
 			input(type="text" name="number" autofocus required)
@@ -29,4 +30,5 @@ block content
 
 block scripts
 	script(src="/javascripts/utils.js")
+	script(src="/javascripts/api.js")
 	script(src="/javascripts/admin/berth-page.js")

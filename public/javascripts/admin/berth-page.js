@@ -1,8 +1,7 @@
 "use strict";
 
-var apiUrl = config.apiUrl;
 var newBerthPage = false;
-var berth = null;
+var Berth = new Api("berths");
 
 // LOAD DATA
 
@@ -11,13 +10,9 @@ var path = window.location.pathname;
 path = path.match(/^\/admin\/berths(\/(.*))?$/)[2];
 if (path) {
 	if (path !== "new") {
-		$.ajax({
-			type: "get",
-			url: apiUrl + "/berths/" + path,
-			dataType: "json"
-		})
+		Berth.get(path)
 		.done(function(berthData){
-			berth = berthData;
+
 			document.title = document.title + " | " + berthData.number;
 			$(".berth-title").text(berthData.number + " - " + berthData.owner);
 
@@ -43,7 +38,9 @@ if (path) {
 				$(".berth-positions-list").append(listItem);
 			});
 		})
-		.fail();
+		.fail(function(){
+			console.error("Could not find berth with id=" + path);
+		});
 	}
 	else {
 		newBerthPage = true;
@@ -55,40 +52,33 @@ $(document).ready(function(){
 	$("form").on("submit", function(e) {
 		e.preventDefault();
 
-		var data = $('form').serialize();
-		var errorMessage = newBerthPage ? "Could not create new berth" : "Could not edit berth";
-		var type = newBerthPage ? "post" : "put";
+		var serializedBerthData = $('form').serialize();
+		var berthId = $("form input:hidden[name='id']").val();
 
-		send(type, data, errorMessage, true);
+		if (newBerthPage) {
+			// CREATE
+			Berth.create(serializedBerthData)
+			.done(function(responseData){ document.location.href = '/admin/berths/' + responseData.number; })
+			.fail(function(err){ $(".error").text("Could not create new berth (" + err.responseText + ")"); });
+		}
+		else {
+			// SAVE
+			Berth.save(berthId, serializedBerthData)
+			.done(function(){ document.location.href = '/admin/berths'; })
+			.fail(function(err){ $(".error").text("Could not edit berth (" + err.responseText + ")"); });
+		}
 
 	});
 
 	if (!newBerthPage) {
 		$("#berthDelete").click(function(e) {
-			send("delete", null, "Could not delete berth", true);
+			// DETETE
+			var berthId = $("form input:hidden[name='id']").val();
+
+			Berth.delete(berthId)
+			.done(function(){ document.location.href = '/admin/berths'; })
+			.fail(function(err){ $(".error").text("Could not delete berth (" + err.responseText + ")"); });
 		});
 	}
 
 });
-
-
-function send(type, data, errorMessage, redirect) {
-	$.ajax({
-		url: type === "post" ? apiUrl +'/berths' : apiUrl + '/berths/' + berth.id,
-		type: type,
-		dataType: data ? "json" : null,
-		data: data,
-		success: function(data) {
-			if (redirect) {
-				var redirectTo = '/admin/berths';
-				// new vs. save, delete
-				if (type === "post") { redirectTo +=  "/" + data.number; }
-				document.location.href = redirectTo;
-			}
-		},
-		error: function(e) {
-			var message = errorMessage + ". " + e.responseText;
-			$(".error").text(message);
-		}
-	});
-}
