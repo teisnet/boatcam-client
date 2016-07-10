@@ -1,8 +1,7 @@
 "use strict";
 
-var apiUrl = config.apiUrl;
 var newCameraPage = false;
-var camera = null;
+var Camera = new Api("cameras");
 
 // LOAD DATA
 
@@ -11,11 +10,7 @@ var path = window.location.pathname;
 path = path.match(/^\/admin\/cameras(\/(.*))?$/)[2];
 if (path) {
 	if (path !== "new") {
-		$.ajax({
-			type: "get",
-			url: apiUrl + "/cameras/" + path,
-			dataType: "json"
-		})
+		Camera.get(path)
 		.done(function(cameraData){
 			document.title = document.title + " | " + cameraData.title;
 			$(".camera-title").text(cameraData.title);
@@ -39,12 +34,11 @@ if (path) {
 				$(".camera-positions-list").append(listItem);
 			});
 
-
-			camera = cameraData;
-
 			initCamera(cameraData.slug);
 		})
-		.fail();
+		.fail(function(){
+			console.error("Could not find camera with id=" + path);
+		});
 	}
 	else {
 		newCameraPage = true;
@@ -57,15 +51,24 @@ $(document).ready(function(){
 	$("form").on("submit", function(e) {
 		e.preventDefault();
 
-		var formData = $('form').serialize();
-
-		if (!formData.match("enabled")) {
-			formData = formData.concat("&enabled=false");
+		var serializedCameraData = $('form').serialize();
+		if (!serializedCameraData.match("enabled")) {
+			serializedCameraData = serializedCameraData.concat("&enabled=false");
 		}
+		var cameraId = $("form input:hidden[name='id']").val();
 
-		var errorMessage = newCameraPage ? "Could not create new camera" : "Could not edit camera";
-		var type = newCameraPage ? "post" : "put";
-		send(type, formData, errorMessage, true);
+		if (newCameraPage) {
+			// CREATE
+			Camera.create(serializedCameraData)
+			.done(function(responseData){ document.location.href = '/admin/cameras/' + responseData.slug; })
+			.fail(function(err){ $(".error").text("Could not create new camera (" + err.responseText + ")"); });
+		}
+		else {
+			// SAVE
+			Camera.save(cameraId, serializedCameraData)
+			.done(function(){ document.location.href = '/admin/cameras'; })
+			.fail(function(err){ $(".error").text("Could not edit camera (" + err.responseText + ")"); });
+		}
 
 	});
 
@@ -83,35 +86,22 @@ function initCamera(cameraSlug) {
 	$(document).ready(function() {
 
 		$("#cameraDelete").click(function() {
-			send("delete", null, "Could not delete camera", true);
+			// DETETE
+			var cameraId = $("form input:hidden[name='id']").val();
+
+			Camera.delete(cameraId)
+			.done(function(){ document.location.href = '/admin/cameras'; })
+			.fail(function(err){ $(".error").text("Could not delete camera (" + err.responseText + ")"); });
 		});
 
 		$('form #enabled').change(function() {
+			var cameraId = $("form input:hidden[name='id']").val();
 			var isChecked = $(this).is(':checked');
-			send("put", { enabled: isChecked }, "Could not set camera enabled = " + JSON.stringify(isChecked));
+			Camera.save(cameraId, { enabled: isChecked })
+			.fail(function(err){
+				$(".error").text("Could not set camera enabled = " + JSON.stringify(isChecked) + " (" + err.responseText + ")");
+			});
 		});
 
-	});
-}
-
-
-function send(type, data, errorMessage, redirect) {
-	$.ajax({
-		url: type === "post" ? apiUrl +'/cameras' : apiUrl + '/cameras/' + camera._id,
-		type: type,
-		dataType: data ? "json" : null,
-		data: data,
-		success: function(data) {
-			if (redirect) {
-				var redirectTo = '/admin/cameras';
-				// new vs. save, delete
-				if (type === "post") { redirectTo +=  "/" + data.slug; }
-				document.location.href = redirectTo;
-			}
-		},
-		error: function(e) {
-			var message = errorMessage + ". " + e.responseText;
-			$(".error").text(message);
-		}
 	});
 }

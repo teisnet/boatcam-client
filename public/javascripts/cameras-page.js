@@ -1,11 +1,11 @@
 "use strict";
 
-var apiUrl = config.apiUrl;
 var socket = io(config.socketUrl + "/cameras");
+var Camera = new Api("cameras");
 
-// LOAD DATA
-$.getJSON(apiUrl + "/cameras", function(camerasData) {
-	$(camerasData).each(function (index, camera) {
+Camera.getAll()
+.done(function(cameras) {
+	$(cameras).each(function (index, camera) {
 		var listItem = '<li id="'+ camera._id + '"><a href="cameras/' + camera.slug + '"><div class="status-indicator"></div>' + camera.title + "</a></li>";
 		$("ul.camera-list").append(listItem);
 	});

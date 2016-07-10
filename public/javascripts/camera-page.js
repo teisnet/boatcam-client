@@ -3,6 +3,7 @@
 var apiUrl = config.apiUrl;
 var snapshotsUrl = config.snapshotsUrl;
 
+var CameraApi = new Api("cameras");
 var player = null;
 var camera = null;
 var down = {};
@@ -20,11 +21,7 @@ $.getJSON(apiUrl + '/berths', function(berthData) {
 var path = window.location.pathname;
 path = path.match(/^\/cameras(\/(.*))?$/)[2];
 if (path) {
-	$.ajax({
-		type: "get",
-		url: apiUrl + "/cameras/" + path,
-		dataType: "json"
-	})
+	CameraApi.get(path)
 	.done(function(cameraData){
 		var cameraUri = cameraData.uri;
 		var slash = cameraUri.lastIndexOf("/");
