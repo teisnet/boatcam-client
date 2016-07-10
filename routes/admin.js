@@ -33,4 +33,17 @@ router.get('/berths/:berthNumber', function(req, res) {
 	res.render('admin/berth', { newBerthPage: false });
 });
 
+// USERS
+router.get('/users', function(req, res) {
+	res.render('admin/users');
+});
+
+router.get('/users/new', function(req, res) {
+	res.render('admin/user', { newUserPage: true });
+});
+
+router.get('/users/:userId', function(req, res) {
+	res.render('admin/user', { newUserPage: false });
+});
+
 module.exports = router;

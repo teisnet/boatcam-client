@@ -1,0 +1,43 @@
+extends ../layout
+
+block navigation
+	+breadcrumb('admin', 'users')
+
+block content
+	.page-header.username
+		if newUserPage
+			| New User
+	form
+		.field
+			input(type="hidden" name="id")
+			label First name:
+			input(type="text" name="firstname" autofocus required)
+		.field
+			label Last name:
+			input(type="text" name="lastname")
+		.field
+			label Username:
+			input(type="text" name="username")
+		.field
+			label Password:
+			input(type="text" name="password")
+		.field
+			label Role:
+			select(name="role")
+				- var roles = [ 'User', 'Editor', 'Administrator']
+				for role in roles
+					option(value=role)= role
+		.page-footer
+			input#userSubmit.btn.btn-success(type="submit" value= newUserPage ? "Create" : "Save")
+			if !newUserPage
+				button#userDelete.btn.btn-danger(type="button") Delete
+		.error
+	if !newUserPage
+		.field
+		h3 Berths
+		ul.camera-positions-list
+
+block scripts
+	script(src="/javascripts/utils.js")
+	script(src="/javascripts/api.js")
+	script(src="/javascripts/admin/user-page.js")
