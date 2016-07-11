@@ -29,16 +29,9 @@ if (path) {
 		document.title = document.title + " | " + cameraData.title;
 		$(".camera-title").text(cameraData.title);
 
-		var config = {
-			slug: cameraData.slug,
-			url:  cameraUri.substr(0, slash),
-			stream: cameraUri.substr(slash + 1),
-			id: cameraData._id,
-			enabled: cameraData.enabled
-		}
-
-		initPlayer(config);
-		camera = new Camera(config);
+		player = new Player(cameraData.uri);
+		camera = new Camera(cameraData);
+		initPlayer(player);
 		initCamera(camera);
 	})
 	.fail();
@@ -101,6 +94,16 @@ $(document).keyup(function(event){
 		break;
 	}
 });
+
+
+function initPlayer(player) {
+	$(player).on('status', function(event, status) {
+		var playerElement = $(".video-window");
+		playerElement.removeClass("pending playing paused stopped");
+		playerElement.addClass(status);
+	});
+}
+
 
 function initCamera(camera) {
 	$(".camera-play-button").mousedown(onPlayCamera);
