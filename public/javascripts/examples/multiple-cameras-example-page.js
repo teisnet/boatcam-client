@@ -26,14 +26,12 @@ function setupCamera(cameraData) {
 	document.title = document.title + " | " + cameraData.title;
 	var camera = new Camera(cameraData);
 
-	/*
 	$(".snapshot-btn").click(function() {
 		var snapshotWindow = window.open("","Snapshot","");
 		camera.snapshot(function(err, result) {
 			snapshotWindow.location = config.snapshotsUrl + "/" + result;
 		});
 	});
-	*/
 
 	$(".fullscreen-btn").click(function(){ toggleFullScreen($(".fullscreen-window").get(0)); });
 
