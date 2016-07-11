@@ -1,0 +1,26 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		title= title
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
+		script(src="/socket.io/socket.io.js")
+		script(src="/javascripts/flowplayer/flowplayer-3.2.13.min.js")
+		// Import following scripts
+		script(src="/javascripts/config.js")
+		script(src="/javascripts/player.js")
+		script(src="/javascripts/camera.js")
+		script(src="/javascripts/utils.js")
+		script(src="/javascripts/api.js")
+		// Custom script for this page
+		script(src="/javascripts/examples/simple-example-page.js")
+		link(rel='stylesheet', href='/stylesheets/examples/simple-example.css')
+	body
+		h1
+			.camera-status-indicator
+			| Fjellebroen Øst
+		.video#player
+		.camera-position
+		.btn.pos1-btn Pos 1
+		.btn.pos2-btn Pos 2
+		.btn.snapshot-btn Snapshot
