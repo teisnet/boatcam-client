@@ -11,13 +11,14 @@ CameraApi.getAll()
 		Cameras[cameraData.id] = cameraData;
 	});
 
+	var camera = setupCamera(camerasData[0]);
+	var player = setupPlayer(camerasData[0]);
+
 	$(".cameras-select").change(function(){
-		setupCamera(Cameras[this.value]);
-		setupPlayer(Cameras[this.value]);
+		camera.set(Cameras[this.value]);
+		player.setUrl(Cameras[this.value].uri);
 	});
 
-	setupCamera(camerasData[0]);
-	setupPlayer(camerasData[0]);
 });
 
 
@@ -48,6 +49,8 @@ function setupCamera(cameraData) {
 		element.removeClass("online offline disabled");
 		element.addClass(value.status);
 	});
+
+	return camera;
 }
 
 function setupPlayer(cameraData) {
@@ -58,4 +61,6 @@ function setupPlayer(cameraData) {
 		playerElement.removeClass("pending playing paused stopped");
 		playerElement.addClass(status);
 	});
+
+	return player;
 }

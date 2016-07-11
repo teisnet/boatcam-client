@@ -8,6 +8,7 @@ var Camera = function(config){
 	self.position = {x: 0, y: 0, zoom: 0};
 	self.online = false;
 	self.id = config.id;
+	self.slug = config.slug;
 	self.socket = io(socketUrl + "/cameras/" + config.slug);
 
 	nextTick(function(){
@@ -25,6 +26,29 @@ var Camera = function(config){
 
 	});
 };
+
+
+Camera.prototype.set = function(config) {
+	var self = this;
+	if (config.slug === this.slug) return;
+	this.socket.disconnect();
+	this.slug = config.slug;
+	this.id = config.id;
+	this.socket = io(socketUrl + "/cameras/" + config.slug);
+
+	self.socket.on("move", function(pos){
+		self.position = pos;
+		$(self).triggerHandler("move", pos);
+	});
+
+	self.socket.on("status", function(value){
+		self.online = value.online;
+		self.enabled = value.enabled;
+		self.status = value.status;
+		$(self).triggerHandler("status", value);
+	});
+
+}
 
 
 Camera.prototype.move = function(direction){
