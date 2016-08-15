@@ -1,7 +1,7 @@
 "use strict";
 
 var socket = io(config.socketUrl + "/cameras");
-var Camera = new Api("cameras");
+var Camera = BoatCamApi.cameras; //new Api("cameras");
 
 Camera.getAll()
 .done(function(cameras) {
