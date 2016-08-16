@@ -1,8 +1,6 @@
 "use strict";
 
-var CameraApi = new Api("cameras");
-
-CameraApi.get("fjellebroen-ost")
+BoatCamApi.cameras.get("fjellebroen-ost")
 .done(function(cameraData){
 	setup(cameraData);
 });

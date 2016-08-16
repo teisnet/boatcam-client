@@ -1,9 +1,8 @@
 "use strict";
 
-var CameraApi = new Api("cameras");
 var Cameras = {};
 
-CameraApi.getAll()
+BoatCamApi.cameras.getAll()
 .done(function(camerasData){
 	var camerasSelect = $(".cameras-select");
 	$.each(camerasData, function(index, cameraData) {
