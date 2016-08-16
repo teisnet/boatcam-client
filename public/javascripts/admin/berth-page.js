@@ -1,7 +1,6 @@
 "use strict";
 
 var newBerthPage = false;
-var Berth = new Api("berths");
 
 // LOAD DATA
 
@@ -10,7 +9,7 @@ var path = window.location.pathname;
 path = path.match(/^\/admin\/berths(\/(.*))?$/)[2];
 if (path) {
 	if (path !== "new") {
-		Berth.get(path)
+		BoatCamApi.berths.get(path)
 		.done(function(berthData){
 
 			document.title = document.title + " | " + berthData.number;
@@ -57,13 +56,13 @@ $(document).ready(function(){
 
 		if (newBerthPage) {
 			// CREATE
-			Berth.create(serializedBerthData)
+			BoatCamApi.berths.create(serializedBerthData)
 			.done(function(responseData){ document.location.href = '/admin/berths/' + responseData.number; })
 			.fail(function(err){ $(".error").text("Could not create new berth (" + err.responseText + ")"); });
 		}
 		else {
 			// SAVE
-			Berth.save(berthId, serializedBerthData)
+			BoatCamApi.berths.save(berthId, serializedBerthData)
 			.done(function(){ document.location.href = '/admin/berths'; })
 			.fail(function(err){ $(".error").text("Could not edit berth (" + err.responseText + ")"); });
 		}
@@ -75,7 +74,7 @@ $(document).ready(function(){
 			// DETETE
 			var berthId = $("form input:hidden[name='id']").val();
 
-			Berth.delete(berthId)
+			BoatCamApi.berths.delete(berthId)
 			.done(function(){ document.location.href = '/admin/berths'; })
 			.fail(function(err){ $(".error").text("Could not delete berth (" + err.responseText + ")"); });
 		});

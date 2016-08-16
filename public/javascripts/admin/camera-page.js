@@ -1,7 +1,6 @@
 "use strict";
 
 var newCameraPage = false;
-var Camera = new Api("cameras");
 
 // LOAD DATA
 
@@ -10,7 +9,7 @@ var path = window.location.pathname;
 path = path.match(/^\/admin\/cameras(\/(.*))?$/)[2];
 if (path) {
 	if (path !== "new") {
-		Camera.get(path)
+		BoatCamApi.cameras.get(path)
 		.done(function(cameraData){
 			document.title = document.title + " | " + cameraData.title;
 			$(".camera-title").text(cameraData.title);
@@ -59,13 +58,13 @@ $(document).ready(function(){
 
 		if (newCameraPage) {
 			// CREATE
-			Camera.create(serializedCameraData)
+			BoatCamApi.cameras.create(serializedCameraData)
 			.done(function(responseData){ document.location.href = '/admin/cameras/' + responseData.slug; })
 			.fail(function(err){ $(".error").text("Could not create new camera (" + err.responseText + ")"); });
 		}
 		else {
 			// SAVE
-			Camera.save(cameraId, serializedCameraData)
+			BoatCamApi.cameras.save(cameraId, serializedCameraData)
 			.done(function(){ document.location.href = '/admin/cameras'; })
 			.fail(function(err){ $(".error").text("Could not edit camera (" + err.responseText + ")"); });
 		}
@@ -89,7 +88,7 @@ function initCamera(cameraSlug) {
 			// DETETE
 			var cameraId = $("form input:hidden[name='id']").val();
 
-			Camera.delete(cameraId)
+			BoatCamApi.cameras.delete(cameraId)
 			.done(function(){ document.location.href = '/admin/cameras'; })
 			.fail(function(err){ $(".error").text("Could not delete camera (" + err.responseText + ")"); });
 		});
@@ -97,7 +96,7 @@ function initCamera(cameraSlug) {
 		$('form #enabled').change(function() {
 			var cameraId = $("form input:hidden[name='id']").val();
 			var isChecked = $(this).is(':checked');
-			Camera.save(cameraId, { enabled: isChecked })
+			BoatCamApi.cameras.save(cameraId, { enabled: isChecked })
 			.fail(function(err){
 				$(".error").text("Could not set camera enabled = " + JSON.stringify(isChecked) + " (" + err.responseText + ")");
 			});
