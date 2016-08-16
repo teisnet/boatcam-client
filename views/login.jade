@@ -24,12 +24,14 @@ html
 			.field
 				label
 				input.btn.btn-success(type="submit" onClick="javascript:login(event)" value="Log In")
-			.field.message
+			.field.message#message
 		script.
 			function login(e) {
 				e.preventDefault();
 				var username = document.getElementById("username").value;
 				var password = document.getElementById("password").value;
-				BoatCamApi.auth.login(username, password);
+				BoatCamApi.auth.login(username, password, function(err) {
+					if (err) { document.getElementById('message').innerText = err.message; }
+				});
 			}
 		+tracker()

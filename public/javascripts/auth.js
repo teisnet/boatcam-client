@@ -39,13 +39,13 @@ Auth.prototype.login = function(username, password, cb) {
 				// Store user credentials
 				window.sessionStorage.setItem(self.LOCAL_TOKEN_KEY, result.token);
 				self._useCredentials(result.token);
-				cb && cb(null, result.message);
+				cb && cb(null, result);
 
 				if (document.location.pathname === "/login") {
 					document.location.href = self.redirectTo;
 				}
 			} else {
-				cb && cb(result.message);
+				cb && cb(result);
 			}
 		},
 		error: function(err) {
