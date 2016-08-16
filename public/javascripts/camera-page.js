@@ -3,14 +3,14 @@
 var apiUrl = config.apiUrl;
 var snapshotsUrl = config.snapshotsUrl;
 
-var CameraApi = new Api("cameras");
 var player = null;
 var camera = null;
 var down = {};
 
 
 // LOAD DATA
-$.getJSON(apiUrl + '/berths', function(berthData) {
+BoatCamApi.berths.getAll()
+.done(function(berthData) {
 	$(berthData).each(function (index, berth) {
 		var $option = $("<option/>").attr("value", berth._id).text(berth.number + " - " + berth.owner);
 		$('#berths').append($option);
@@ -21,7 +21,7 @@ $.getJSON(apiUrl + '/berths', function(berthData) {
 var path = window.location.pathname;
 path = path.match(/^\/cameras(\/(.*))?$/)[2];
 if (path) {
-	CameraApi.get(path)
+	BoatCamApi.cameras.get(path)
 	.done(function(cameraData){
 		var cameraUri = cameraData.uri;
 		var slash = cameraUri.lastIndexOf("/");
@@ -120,20 +120,16 @@ function initCamera(camera) {
 
 	$(".savecamerapos").bind("click", function(){
 		var berthId = $('#berths').val();
-
-		$.ajax({
-			url: apiUrl + '/berths/' + berthId + '/positions/' + camera.id,
-			type: 'PUT',
-			dataType: 'json',
-			data: camera.position,
-			success: function(res) {},
-			error:   function(err) { console.log("savecamerapos: error " + JSON.stringify(err)); }
+		BoatCamApi.berths.save(berthId + '/positions/' + camera.id, camera.position)
+		.fail(function() {
+			console.log("savecamerapos: error " + JSON.stringify(err));
 		});
 	});
 
 	$(".loadcamerapos").bind("click", function(){
 		var berthId = $('#berths').val();
-		$.getJSON(apiUrl + '/berths/' + berthId + '/positions/' + camera.id, function(res){
+		BoatCamApi.berths.get(berthId + '/positions/' + camera.id)
+		.done(function(res) {
 			camera.moveTo(res);
 		});
 	});
