@@ -1,0 +1,32 @@
+extends layout
+
+block navigation
+	+breadcrumb('profile')
+
+block content
+	.page-header.username
+	form
+		.field
+			input(type="hidden" name="id")
+			label First name:
+			input(type="text" name="firstname" autofocus required)
+		.field
+			label Last name:
+			input(type="text" name="lastname")
+		.field
+			label Username:
+			input(type="text" name="username")
+		.field
+			label Password:
+			input(type="text" name="password")
+		.field
+			label Role:
+			input.selectable(type="text" name="role" readonly)
+		.page-footer
+			input#userSubmit.btn.btn-success(type="submit" value="Save")
+		.error
+
+
+block scripts
+	script(src="/javascripts/utils.js")
+	script(src="/javascripts/profile-page.js")

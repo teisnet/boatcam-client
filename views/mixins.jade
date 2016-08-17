@@ -9,6 +9,9 @@ mixin breadcrumb(...route)
 			| &nbsp;>&nbsp;
 			li
 				a(href=path)= levelNames[level]
+	ul.pull-right
+		li
+			a.profile(href="/profile")
 
 mixin tracker()
 	script.

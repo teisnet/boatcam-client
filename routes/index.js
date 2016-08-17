@@ -13,6 +13,11 @@ router.get('/', function(req, res) {
 });
 
 
+router.get('/profile', function(req, res) {
+	res.render('profile');
+});
+
+
 // CAMERAS
 router.get('/cameras', function(req, res) {
 	res.render('cameras');
