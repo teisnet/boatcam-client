@@ -42,3 +42,10 @@ BoatCamApi.getUser()
 		$(".profile").text(user.username);
 	});
 });
+
+$(document).ready(function() {
+	$('a.logout').click(function(){
+		BoatCamApi.auth.logout();
+		return false;
+	});
+});

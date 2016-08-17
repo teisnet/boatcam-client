@@ -59,6 +59,7 @@ Auth.prototype.logout = function() {
 	this.token = undefined;
 	this.isAuthenticated = false;
 	window.sessionStorage.removeItem(this.LOCAL_TOKEN_KEY);
+	document.location.href = "/login";
 }
 
 Auth.prototype._useCredentials = function(token) {
