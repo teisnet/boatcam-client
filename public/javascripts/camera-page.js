@@ -118,7 +118,7 @@ function initCamera(camera) {
 
 	$(".camera-control-panel .snapshot").click(onSnapshot);
 
-	$(".savecamerapos").bind("click", function(){
+	$(".savecamerapos").on("click", function(){
 		var berthId = $('#berths').val();
 		BoatCamApi.berths.save(berthId + '/positions/' + camera.id, camera.position)
 		.fail(function() {
@@ -126,7 +126,7 @@ function initCamera(camera) {
 		});
 	});
 
-	$(".loadcamerapos").bind("click", function(){
+	$(".loadcamerapos").on("click", function(){
 		var berthId = $('#berths').val();
 		BoatCamApi.berths.get(berthId + '/positions/' + camera.id)
 		.done(function(res) {
@@ -134,11 +134,11 @@ function initCamera(camera) {
 		});
 	});
 
-	$(".fullscreen").bind("click", function(){
+	$(".fullscreen").on("click", function(){
 		toggleFullScreen($(".video-container").get(0));
 	});
 
-	$(".pause").bind("click", function(){
+	$(".pause").on("click", function(){
 		player.stop(); // alternatively pause()
 	});
 
@@ -171,13 +171,13 @@ function onMoveCameraKey(command) {
 function onMoveCamera(event) {
 	if (!camera) { return console.error("No camera"); }
 	camera.move(event.data);
-	$(document).bind("mouseup", onStopCamera);
+	$(document).on("mouseup", onStopCamera);
 };
 
 function onStopCamera() {
 	if (!camera) { return console.error("No camera"); }
 	camera.stop();
-	$(document).unbind("mouseup", onStopCamera);
+	$(document).off("mouseup", onStopCamera);
 }
 
 function onSnapshot() {
