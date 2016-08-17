@@ -39,6 +39,7 @@ Api.prototype.send = function(id, type, data, cb) {
 		type: type,
 		dataType: data ? "json" : null,
 		data: data,
+		cache: false,
 		beforeSend: function(xhr) {
 			if (self.headerKey && self.headerValue) { xhr.setRequestHeader(self.headerKey, self.headerValue);
 		} },
