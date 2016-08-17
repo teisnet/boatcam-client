@@ -1,4 +1,3 @@
-
 "use strict";
 
 function Player(url, elementName) {
