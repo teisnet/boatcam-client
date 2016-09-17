@@ -6,7 +6,7 @@ var Camera = BoatCamApi.cameras; //new Api("cameras");
 Camera.getAll()
 .done(function(cameras) {
 	$(cameras).each(function (index, camera) {
-		var listItem = '<li id="'+ camera._id + '"><a href="cameras/' + camera.slug + '"><div class="status-indicator ' + camera.status.status + '"></div>' + camera.title + "</a></li>";
+		var listItem = '<li id="'+ camera.id + '"><a href="cameras/' + camera.slug + '"><div class="status-indicator ' + camera.status.status + '"></div>' + camera.title + "</a></li>";
 		$("ul.camera-list").append(listItem);
 	});
 
@@ -16,7 +16,7 @@ Camera.getAll()
 });
 
 function setStatus(status) {
-	var element = $("#" + status._id + " .status-indicator");
+	var element = $("#" + status.id + " .status-indicator");
 
 	element.removeClass("online offline disabled");
 	element.addClass(status.status);

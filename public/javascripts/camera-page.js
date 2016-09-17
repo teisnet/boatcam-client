@@ -12,7 +12,7 @@ var down = {};
 BoatCamApi.berths.getAll()
 .done(function(berthData) {
 	$(berthData).each(function (index, berth) {
-		var $option = $("<option/>").attr("value", berth._id).text(berth.number + " - " + berth.owner);
+		var $option = $("<option/>").attr("value", berth.id).text(berth.number + " - " + berth.owner);
 		$('#berths').append($option);
 	});
 });
