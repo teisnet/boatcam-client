@@ -18,11 +18,12 @@ if (path) {
 
 			fillForm(cameraData);
 
-			$(cameraData.positions).each(function(index, position) {
+			$(cameraData.berths).each(function(index, berth) {
+				var position = berth.CameraPosition;
 				var listItem =
 				'<li>\
 					<span class="number">\
-						<a href="/admin/berths/' + (position.berth && position.berth.number) + '">' + (position.berth && position.berth.number) + '</a>\
+						<a href="/admin/berths/' + (berth && berth.number) + '">' + (berth && berth.number) + '</a>\
 					</span>\
 					<span class="position">x ' + position.x.toFixed(1) + '\u00B0</span>\
 					<span class="position">y ' + position.y.toFixed(1) + '\u00B0</span>\

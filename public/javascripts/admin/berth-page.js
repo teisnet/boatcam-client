@@ -22,11 +22,12 @@ if (path) {
 				$(".users-list").append(listItem);
 			});
 
-			$(berthData.cameraPositions).each(function(index, position) {
+			$(berthData.cameras).each(function(index, camera) {
+				var position = camera.CameraPosition;
 				var listItem =
 				'<li>\
 <span class="title">\
-	<a href="/admin/cameras/' + (position.camera && position.camera.slug) + '">' + ((position.camera && position.camera.title) || " ") + '</a>\
+	<a href="/admin/cameras/' + (camera && camera.slug) + '">' + ((camera && camera.title) || " ") + '</a>\
 </span>\
 <span class="position">x ' + position.x.toFixed(1) + '\u00B0</span>\
 <span class="position">y ' + position.y.toFixed(1) + '\u00B0</span>\
