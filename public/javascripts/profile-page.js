@@ -7,7 +7,7 @@ BoatCamApi.getUser()
 
 	fillForm(userData);
 })
-.fail(function(){
+.fail(function(err){
 	console.error("Could not find user profile");
 });
 

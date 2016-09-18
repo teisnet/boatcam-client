@@ -121,7 +121,7 @@ function initCamera(camera) {
 	$(".savecamerapos").on("click", function(){
 		var berthId = $('#berths').val();
 		BoatCamApi.berths.save(berthId + '/positions/' + camera.id, camera.position)
-		.fail(function() {
+		.fail(function(err) {
 			console.log("savecamerapos: error " + JSON.stringify(err));
 		});
 	});

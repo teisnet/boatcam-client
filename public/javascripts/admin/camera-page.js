@@ -36,7 +36,7 @@ if (path) {
 
 			initCamera(cameraData.slug);
 		})
-		.fail(function(){
+		.fail(function(err){
 			console.error("Could not find camera with id=" + path);
 		});
 	}

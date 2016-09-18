@@ -21,7 +21,7 @@ if (path) {
 				$(".berths-list").append(listItem);
 			});
 		})
-		.fail(function(){
+		.fail(function(err){
 			console.error("Could not find berth with id=" + path);
 		});
 	}
