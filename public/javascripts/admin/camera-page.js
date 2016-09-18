@@ -21,14 +21,14 @@ if (path) {
 			$(cameraData.berths).each(function(index, berth) {
 				var position = berth.CameraPosition;
 				var listItem =
-				'<li>\
+				'<li data-berth-id="' + berth.id + '">\
 					<span class="number">\
 						<a href="/admin/berths/' + (berth && berth.number) + '">' + (berth && berth.number) + '</a>\
 					</span>\
 					<span class="position">x ' + position.x.toFixed(1) + '\u00B0</span>\
 					<span class="position">y ' + position.y.toFixed(1) + '\u00B0</span>\
 					<span class="position">' + position.zoom.toFixed(1) + 'x</span>\
-					<i class="fa fa-close pull-right"></i>\
+					<i class="fa fa-close pull-right delete-position"></i>\
 				</li>';
 
 				$(".camera-positions-list").append(listItem);
@@ -70,6 +70,21 @@ $(document).ready(function(){
 			.fail(function(err){ $(".error").text("Could not edit camera (" + err.responseText + ")"); });
 		}
 
+	});
+
+	$("ul.camera-positions-list").on("click", "li .delete-position", function() {
+		var parent = $(this).parent("li");
+		var cameraId = $("form input:hidden[name='id']").val();
+		var berthId = parent.data("berth-id");
+		console.log("Delete " + parent.data("berth-id"));
+
+		BoatCamApi.berths.delete(berthId + '/positions/' + cameraId)
+		.success(function() {
+			parent.remove();
+		})
+		.fail(function(err) {
+			$(".error").text("Could not delete camera position (" + err.responseText + ")");
+		});
 	});
 
 });
