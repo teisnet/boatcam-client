@@ -17,8 +17,8 @@ if (path) {
 			fillForm(userData);
 
 			$(userData.berths).each(function(index, userBerth) {
-				var listItem = '<li>' + userBerth.number + '<i class="fa fa-close pull-right"></i></li>';
-				$(".camera-positions-list").append(listItem);
+				var listItem = '<li data-berth-id="' + userBerth.id + '">' + userBerth.number + '<i class="fa fa-close pull-right delete-berth"></i></li>';
+				$(".berths-list").append(listItem);
 			});
 		})
 		.fail(function(){
@@ -63,5 +63,20 @@ $(document).ready(function(){
 			.fail(function(err){ $(".error").text("Could not delete user (" + err.responseText + ")"); });
 		});
 	}
+
+	$("ul.berths-list").on("click", "li .delete-berth", function() {
+		var parent = $(this).parent("li");
+		var userId = $("form input:hidden[name='id']").val();
+		var berthId = parent.data("berth-id");
+		console.log("Delete " + parent.data("berth-id"));
+
+		BoatCamApi.berths.delete(berthId + '/users/' + userId)
+		.success(function() {
+			parent.remove();
+		})
+		.fail(function(err) {
+			$(".error").text("Could not delete berth (" + err.responseText + ")");
+		});
+	});
 
 });
