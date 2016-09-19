@@ -1,6 +1,7 @@
 "use strict";
 
 var newUserPage = false;
+var userId = null;
 
 // LOAD DATA
 
@@ -13,7 +14,7 @@ if (path) {
 		.done(function(userData){
 			document.title = document.title + " | " + userData.name;
 			$(".username").text(userData.name);
-
+			userId = userData.id;
 			fillForm(userData);
 
 			$(userData.berths).each(function(index, userBerth) {
@@ -36,7 +37,6 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		var serializedUserData = $('form').serialize();
-		var userId = $("form input:hidden[name='id']").val();
 
 		if (newUserPage) {
 			// CREATE
@@ -56,8 +56,6 @@ $(document).ready(function(){
 	if (!newUserPage) {
 		$("#userDelete").click(function(e) {
 			// DETETE
-			var userId = $("form input:hidden[name='id']").val();
-
 			BoatCamApi.users.delete(userId)
 			.done(function(){ document.location.href = '/admin/users'; })
 			.fail(function(err){ $(".error").text("Could not delete user (" + err.responseText + ")"); });
@@ -66,7 +64,6 @@ $(document).ready(function(){
 
 	$("ul.berths-list").on("click", "li .delete-berth", function() {
 		var parent = $(this).parent("li");
-		var userId = $("form input:hidden[name='id']").val();
 		var berthId = parent.data("berth-id");
 		console.log("Delete " + parent.data("berth-id"));
 
