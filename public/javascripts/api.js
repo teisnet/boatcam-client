@@ -21,7 +21,11 @@ Api.prototype.get = function(id, cb){
 }
 
 Api.prototype.create = function(data, cb){
-	return this.send(null, "post", data, cb);
+	if (typeof data === "string") {
+		var path =  data;
+		data = null;
+	}
+	return this.send(path, "post", data, cb);
 }
 
 Api.prototype.save = function(id, data, cb){
