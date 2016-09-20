@@ -93,17 +93,17 @@ $(document).ready(function(){
 
 	$(".add-berth").on("click", function() {
 		var selectElement = $("select.berths-select");
-		var selectedOptionElement = $("select.berths-select option:selected");
+		var optionElement = selectElement.find("option:selected");
 		var berthId = selectElement.val();
 		if (berthId === null) return;
-		var berthNumber = selectedOptionElement.text();
+		var berthNumber = optionElement.text();
 
-		BoatCamApi.users.create(userId + '/berths/' + berthId)
+		BoatCamApi.users.createRelation(userId + '/berths/' + berthId)
 		.success(function() {
 			var listItem = '<li data-berth-id="' + berthId + '">' + berthNumber + '<i class="fa fa-close pull-right delete-berth"></i></li>';
 			$(".berths-list").append(listItem);
 			selectElement.val(selectElement.find("option:first").val());
-			selectedOptionElement.attr('disabled','disabled');
+			optionElement.attr('disabled','disabled');
 		})
 		.fail(function(err) {
 			$(".error").text("Could not add berth (" + err.responseText + ")");
