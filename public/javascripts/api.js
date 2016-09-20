@@ -21,11 +21,11 @@ Api.prototype.get = function(id, cb){
 }
 
 Api.prototype.create = function(data, cb){
-	if (typeof data === "string") {
-		var path =  data;
-		data = null;
-	}
-	return this.send(path, "post", data, cb);
+	return this.send(null, "post", data, cb);
+}
+
+Api.prototype.createRelation = function(path, cb){
+	return this.send(path, "post", null, cb);
 }
 
 Api.prototype.save = function(id, data, cb){
