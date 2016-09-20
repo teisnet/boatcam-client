@@ -38,10 +38,25 @@ if (path) {
 
 				$(".berth-positions-list").append(listItem);
 			});
+
+			// Populate 'Add user'-dropdown
+			BoatCamApi.berths.get(berthId + "/users?required=false")
+			.then(function(users) {
+				var selectElement = $("select.users-select")
+				$.each(users, function() {
+					var option = $("<option />").val(this.id).text(this.username);
+					if (this.related) {
+						option.attr('disabled','disabled');
+					}
+					selectElement.append(option);
+				});
+			});
+
 		})
 		.fail(function(err){
 			console.error("Could not find berth with id=" + path);
 		});
+
 	}
 	else {
 		newBerthPage = true;
@@ -102,9 +117,29 @@ $(document).ready(function(){
 		BoatCamApi.berths.delete(berthId + '/users/' + userId)
 		.success(function() {
 			parent.remove();
+			$("select.users-select option[value=" + userId + "]").removeAttr('disabled');
 		})
 		.fail(function(err) {
 			$(".error").text("Could not delete user (" + err.responseText + ")");
+		});
+	});
+
+	$(".add-user").on("click", function() {
+		var selectElement = $("select.users-select");
+		var optionElement = selectElement.find("option:selected");
+		var userId = selectElement.val();
+		if (userId === null) return;
+		var username = optionElement.text();
+
+		BoatCamApi.berths.createRelation(berthId + '/users/' + userId)
+		.success(function() {
+			var listItem = '<li data-user-id="' + userId + '">' + username + '<i class="fa fa-close pull-right delete-user"></i></li>';
+			$(".users-list").append(listItem);
+			selectElement.val(selectElement.find("option:first").val());
+			optionElement.attr('disabled','disabled');
+		})
+		.fail(function(err) {
+			$(".error").text("Could not add user (" + err.responseText + ")");
 		});
 	});
 
