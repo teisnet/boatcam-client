@@ -1,6 +1,7 @@
 "use strict";
 
 var newBerthPage = false;
+var berthId = null;
 
 // LOAD DATA
 
@@ -11,7 +12,7 @@ if (path) {
 	if (path !== "new") {
 		BoatCamApi.berths.get(path)
 		.done(function(berthData){
-
+			berthId = berthData.id;
 			document.title = document.title + " | " + berthData.number;
 			$(".berth-title").text(berthData.number + " - " + berthData.owner);
 
@@ -53,7 +54,6 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		var serializedBerthData = $('form').serialize();
-		var berthId = $("form input:hidden[name='id']").val();
 
 		if (newBerthPage) {
 			// CREATE
@@ -73,8 +73,6 @@ $(document).ready(function(){
 	if (!newBerthPage) {
 		$("#berthDelete").click(function(e) {
 			// DETETE
-			var berthId = $("form input:hidden[name='id']").val();
-
 			BoatCamApi.berths.delete(berthId)
 			.done(function(){ document.location.href = '/admin/berths'; })
 			.fail(function(err){ $(".error").text("Could not delete berth (" + err.responseText + ")"); });
@@ -84,7 +82,6 @@ $(document).ready(function(){
 
 	$("ul.berth-positions-list").on("click", "li .delete-position", function() {
 		var parent = $(this).parent("li");
-		var berthId = $("form input:hidden[name='id']").val();
 		var cameraId = parent.data("camera-id");
 		console.log("Delete " + parent.data("camera-id"));
 
@@ -99,7 +96,6 @@ $(document).ready(function(){
 
 	$("ul.users-list").on("click", "li .delete-user", function() {
 		var parent = $(this).parent("li");
-		var berthId = $("form input:hidden[name='id']").val();
 		var userId = parent.data("user-id");
 		console.log("Delete " + parent.data("user-id"));
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var newCameraPage = false;
+var cameraId = null;
 
 // LOAD DATA
 
@@ -11,6 +12,7 @@ if (path) {
 	if (path !== "new") {
 		BoatCamApi.cameras.get(path)
 		.done(function(cameraData){
+			cameraId = cameraData.id;
 			document.title = document.title + " | " + cameraData.title;
 			$(".camera-title").text(cameraData.title);
 			$(".camera-title").attr("href", "/cameras/" + cameraData.slug);
@@ -55,7 +57,6 @@ $(document).ready(function(){
 		if (!serializedCameraData.match("enabled")) {
 			serializedCameraData = serializedCameraData.concat("&enabled=false");
 		}
-		var cameraId = $("form input:hidden[name='id']").val();
 
 		if (newCameraPage) {
 			// CREATE
@@ -74,7 +75,6 @@ $(document).ready(function(){
 
 	$("ul.camera-positions-list").on("click", "li .delete-position", function() {
 		var parent = $(this).parent("li");
-		var cameraId = $("form input:hidden[name='id']").val();
 		var berthId = parent.data("berth-id");
 		console.log("Delete " + parent.data("berth-id"));
 
@@ -102,15 +102,12 @@ function initCamera(cameraSlug) {
 
 		$("#cameraDelete").click(function() {
 			// DETETE
-			var cameraId = $("form input:hidden[name='id']").val();
-
 			BoatCamApi.cameras.delete(cameraId)
 			.done(function(){ document.location.href = '/admin/cameras'; })
 			.fail(function(err){ $(".error").text("Could not delete camera (" + err.responseText + ")"); });
 		});
 
 		$('form #enabled').change(function() {
-			var cameraId = $("form input:hidden[name='id']").val();
 			var isChecked = $(this).is(':checked');
 			BoatCamApi.cameras.save(cameraId, { enabled: isChecked })
 			.fail(function(err){
