@@ -23,10 +23,10 @@ if (path) {
 				$(".users-list").append(listItem);
 			});
 
-			$(berthData.cameras).each(function(index, camera) {
-				var position = camera.CameraPosition;
+			$(berthData.positions).each(function(index, position) {
+				var camera = position.camera;
 				var listItem =
-				'<li data-camera-id="' + camera.id + '">\
+				'<li data-position-id="' + position.id + '">\
 <span class="title">\
 	<a href="/admin/cameras/' + (camera && camera.slug) + '">' + ((camera && camera.title) || " ") + '</a>\
 </span>\
@@ -97,10 +97,10 @@ $(document).ready(function(){
 
 	$("ul.berth-positions-list").on("click", "li .delete-position", function() {
 		var parent = $(this).parent("li");
-		var cameraId = parent.data("camera-id");
-		console.log("Delete " + parent.data("camera-id"));
+		var positionId = parent.data("position-id");
+		console.log("Delete " + positionId);
 
-		BoatCamApi.berths.delete(berthId + '/positions/' + cameraId)
+		BoatCamApi.berths.delete(berthId + '/positions/' + positionId)
 		.success(function() {
 			parent.remove();
 		})

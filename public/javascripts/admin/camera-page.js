@@ -20,10 +20,11 @@ if (path) {
 
 			fillForm(cameraData);
 
-			$(cameraData.berths).each(function(index, berth) {
-				var position = berth.CameraPosition;
+			$(cameraData.positions).each(function(index, position) {
+				var berth = position.berths[0];
+
 				var listItem =
-				'<li data-berth-id="' + berth.id + '">\
+				'<li data-position-id="' + position.id + '">\
 					<span class="number">\
 						<a href="/admin/berths/' + (berth && berth.number) + '">' + (berth && berth.number) + '</a>\
 					</span>\
@@ -75,10 +76,10 @@ $(document).ready(function(){
 
 	$("ul.camera-positions-list").on("click", "li .delete-position", function() {
 		var parent = $(this).parent("li");
-		var berthId = parent.data("berth-id");
-		console.log("Delete " + parent.data("berth-id"));
+		var positionId = parent.data("position-id");
+		console.log("Delete " + positionId);
 
-		BoatCamApi.berths.delete(berthId + '/positions/' + cameraId)
+		BoatCamApi.cameras.delete(cameraId + '/positions/' + positionId)
 		.success(function() {
 			parent.remove();
 		})
