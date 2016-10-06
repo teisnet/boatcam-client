@@ -5,24 +5,18 @@ var snapshotsUrl = config.snapshotsUrl;
 
 var player = null;
 var camera = null;
+var cameraId = null;
 var down = {};
-
+var berths = {};
 
 // LOAD DATA
-BoatCamApi.berths.getAll()
-.done(function(berthData) {
-	$(berthData).each(function (index, berth) {
-		var $option = $("<option/>").attr("value", berth.id).text(berth.number + " - " + berth.owner);
-		$('#berths').append($option);
-	});
-});
-
 // Client side redirect if sub-route points to a camera instance
 var path = window.location.pathname;
 path = path.match(/^\/cameras(\/(.*))?$/)[2];
 if (path) {
 	BoatCamApi.cameras.get(path)
 	.done(function(cameraData){
+		cameraId = cameraData.id;
 		var cameraUri = cameraData.uri;
 		var slash = cameraUri.lastIndexOf("/");
 
@@ -33,9 +27,66 @@ if (path) {
 		camera = new Camera(cameraData);
 		initPlayer(player);
 		initCamera(camera);
+
+		BoatCamApi.cameras.get(cameraData.id + "/berths")
+		.done(function(berthData) {
+			berths = berthData.reduce(function(berths, berth) {
+				berths[berth.id] = berth;
+				return berths;
+			}, {});
+
+			$.each(berthData, function () {
+				var $option = $("<option/>").val(this.id).text(this.number);
+				$("select#berths").append($option);
+			});
+		});
 	})
 	.fail();
 }
+
+$(document).ready(function() {
+	$("select#berths").change(function() {
+		var berthId = this.value;
+		$(".positions-list").empty();
+		$(berths[berthId].positions).each(function(index, position) {
+			var listItem =
+			'<li data-position-id="' + position.id + '">\
+				<span class="position">x ' + position.x.toFixed(1) + '\u00B0</span>\
+				<span class="position">y ' + position.y.toFixed(1) + '\u00B0</span>\
+				<span class="position">' + position.zoom.toFixed(1) + 'x</span>\
+				<i class="fa fa-close pull-right delete-position"></i>\
+			</li>';
+
+			$(".positions-list").append(listItem);
+		});
+
+	});
+
+	$("ul.positions-list").on("click", "li .delete-position", function(e) {
+		e.stopPropagation();
+		var parent = $(this).parent("li");
+		var positionId = parent.data("position-id");
+
+		BoatCamApi.cameras.delete(cameraId + '/positions/' + positionId)
+		.success(function() {
+			parent.remove();
+		})
+		.fail(function(err) {
+			$(".error").text("Could not delete position (" + err.responseText + ")");
+		});
+	});
+
+
+	$("ul.positions-list").on("click", "li", function() {
+		var positionId = $(this).data("position-id");
+
+		BoatCamApi.berths.get(cameraId + '/positions/' + positionId)
+		.done(function(res) {
+			camera.moveTo(res);
+		});
+	});
+
+});
 
 
 $(document).keydown(function(event){
@@ -120,17 +171,19 @@ function initCamera(camera) {
 
 	$(".savecamerapos").on("click", function(){
 		var berthId = $('#berths').val();
-		BoatCamApi.berths.save(berthId + '/positions/' + camera.id, camera.position)
+		BoatCamApi.berths.createRelation(berthId + '/positions/' + camera.id, camera.position)
+		.success(function(position) {
+			var listItem =
+			'<li data-position-id="' + position.id + '">\
+				<span class="position">x ' + position.x.toFixed(1) + '\u00B0</span>\
+				<span class="position">y ' + position.y.toFixed(1) + '\u00B0</span>\
+				<span class="position">' + position.zoom.toFixed(1) + 'x</span>\
+				<i class="fa fa-close pull-right delete-position"></i>\
+			</li>';
+			$(".positions-list").append(listItem);
+		})
 		.fail(function(err) {
 			console.log("savecamerapos: error " + JSON.stringify(err));
-		});
-	});
-
-	$(".loadcamerapos").on("click", function(){
-		var berthId = $('#berths').val();
-		BoatCamApi.berths.get(berthId + '/positions/' + camera.id)
-		.done(function(res) {
-			camera.moveTo(res);
 		});
 	});
 

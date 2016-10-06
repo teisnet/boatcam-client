@@ -33,8 +33,10 @@ block content
 	.clearboth
 		p.status
 		select#berths
-		.btn.btn-success.savecamerapos Gem position
-		.btn.btn-success.loadcamerapos Hent position
+			option(value="" hidden disabled selected) Select berth
+		ul.camera-list.positions-list
+		div
+			.btn.btn-success.savecamerapos Gem position
 	.clearboth
 
 
