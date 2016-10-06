@@ -24,8 +24,12 @@ Api.prototype.create = function(data, cb){
 	return this.send(null, "post", data, cb);
 }
 
-Api.prototype.createRelation = function(path, cb){
-	return this.send(path, "post", null, cb);
+Api.prototype.createRelation = function(path, data, cb){
+	if (!cb && (typeof data === "function")) {
+		cb = data;
+		data = null;
+	}
+	return this.send(path, "post", data, cb);
 }
 
 Api.prototype.save = function(id, data, cb){
