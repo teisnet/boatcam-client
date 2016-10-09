@@ -34,8 +34,7 @@ router.get('/examples', function(req, res) {
 	res.render('examples/index');
 });
 
-
-router.get('/examples/:exampleName', function(req, res) {
+router.get('/examples/:exampleName/:camera?', function(req, res) {
 	let exampleName = req.params.exampleName;
 	res.render('examples/' + exampleName);
 });
