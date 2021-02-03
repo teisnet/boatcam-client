@@ -36,8 +36,8 @@ if (path) {
 			}, {});
 
 			$.each(berthData, function () {
-				var $option = $("<option/>").val(this.id).text(this.number);
-				$("select#berths").append($option);
+				var optionElement = $("<option/>").val(this.id).text(this.number);
+				$("select#berths").append(optionElement);
 			});
 		});
 	})

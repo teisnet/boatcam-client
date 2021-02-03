@@ -104,7 +104,8 @@ Player.prototype.setUrl = function(url) {
 	var slash = url.lastIndexOf('/');
 	var playUrl = url.substr(0, slash);
 	var playStream = url.substr(slash + 1);
-	this.player.play({netConnectionUrl: playUrl, url: playStream});
+	this.player.unload();
+	// this.player.play({netConnectionUrl: playUrl, url: playStream});
 }
 
 Player.prototype.get = function() {

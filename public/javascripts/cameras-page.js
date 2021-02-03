@@ -21,3 +21,14 @@ function setStatus(status) {
 	element.removeClass("online offline disabled");
 	element.addClass(status.status);
 }
+
+socket.on("connect_error", errorHandler.bind(null, "connect_error") );
+socket.on("connect", errorHandler.bind(null, "connect") );
+socket.on("disconnect", errorHandler.bind(null, "disconnect") );
+socket.on("connect_failed", errorHandler.bind(null, "connect_failed") );
+socket.on("error", errorHandler.bind(null, "error") );
+
+
+function errorHandler(event, test) {
+	console.log("Event fired: " + event);
+}

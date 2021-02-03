@@ -1,0 +1,27 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		meta(name="apple-mobile-web-app-capable" content="yes")
+		title Video.js Example
+		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
+		link(rel='stylesheet' href='/stylesheets/style.css')
+		link(rel='stylesheet' href='//vjs.zencdn.net/5.8/video-js.min.css')
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
+		script(src="//vjs.zencdn.net/5.8/video.min.js")
+		script(src="/javascripts/config.js")
+		script(src="/javascripts/auth.js")
+		script(src="/javascripts/api.js")
+		script(src="/javascripts/utils.js")
+		script(src="/javascripts/boatcam-api.js")
+		script(src="/javascripts/examples/video-js-example/video-js-example-page.js")
+	body
+		.container
+			.content
+				.page-header
+					.status-indicator
+					= title
+
+				video#player.video-window
+					//video(webkit-playsinline playsinline)
+				p.message &nbsp;
